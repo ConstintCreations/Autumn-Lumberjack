@@ -1,6 +1,6 @@
 const main = document.querySelector('.main');
 
-const trees = [];
+const trees = {};
 
 const wood = {
     temporary: 0,
@@ -15,10 +15,15 @@ const treeUpgrades = {
     shakeDelay: 1000,
 }
 
-createTree("starter");
-createTree("temporary");
+function randomTreeID() {
+    return "Tree-" + Date.now() + Math.random().toString(36).substring(2, 15);
+}
 
-function createTree(type) {
+createTree("starter");
+
+function createTree(type, tree=null) {
+    const id = randomTreeID();
+    
     let centered = false;
     const treeElement = document.createElement('img');
     switch(type) {
@@ -32,6 +37,7 @@ function createTree(type) {
     }
 
     treeElement.classList.add('tree');
+    treeElement.dataset.id = id;
 
     if (centered) {
         treeElement.style.left = `calc(50% - 2.5vh)`;
@@ -44,20 +50,23 @@ function createTree(type) {
     main.appendChild(treeElement);
 
     const treeObj = {
+        id: id,
         element: treeElement,
         type: (type == "starter" ? "temporary" : type),
-        clickable: true,
-        state: "idle", /* idle, shaking, shakingDelay, falling, growing */
-        timer: 0,
+        clickable: (type == "starter" ? true : false),
+        state: (type == "starter" ? "idle" : "growing"), /* idle, shaking, shakingDelay, falling, growing */
+        timer: (type == "starter" ? 0 : (tree ? tree.regrowSpeed : treeUpgrades.regrowSpeed)),
         clickedThisShake: false,
         clicks: 0,
-        maxClicks: treeUpgrades.maxClicks,
-        regrows: treeUpgrades.regrows,
-        regrowSpeed: treeUpgrades.regrowSpeed,
-        fallSpeed: treeUpgrades.fallSpeed,
-        shakeDelay: treeUpgrades.shakeDelay,
-        clickedTime: (treeUpgrades.shakeDelay / 2.5),
+        maxClicks: (tree ? tree.maxClicks : treeUpgrades.maxClicks),
+        regrows: (tree ? tree.regrows : treeUpgrades.regrows),
+        regrowSpeed: (tree ? tree.regrowSpeed : treeUpgrades.regrowSpeed),
+        fallSpeed: (tree ? tree.fallSpeed : treeUpgrades.fallSpeed),
+        shakeDelay: (tree ? tree.shakeDelay : treeUpgrades.shakeDelay),
+        clickedTime: (tree ? (tree.shakeDelay / 2.5) : (treeUpgrades.shakeDelay / 2.5)),
     }
+
+    type=="starter" ? treeElement.style.animation = "" : treeElement.style.animation = `treeGrowAnimation ${treeObj.regrowSpeed/1000}s ease-out forwards`;
 
     treeObj.element.addEventListener('click', (e) => {
         if (!treeObj.clickable) return;
@@ -67,7 +76,7 @@ function createTree(type) {
         treeObj.timer = treeObj.clickedTime;
     });
 
-    trees.push(treeObj);
+    trees[id] = treeObj;
 }
 
 
@@ -78,8 +87,8 @@ let lastTimestamp = 0;
 function gameLoop(timestamp) {
     const deltaTime = timestamp - lastTimestamp;
     lastTimestamp = timestamp;
-    for (let tree of trees) {
-        updateTrees(tree, deltaTime);
+    for (const treeID in trees) {
+        updateTrees(trees[treeID], deltaTime);
     }
     requestAnimationFrame(gameLoop);
 }
@@ -128,13 +137,14 @@ function updateTrees(tree, deltaTime) {
             tree.timer -= deltaTime;
             if (tree.timer <= 0) {
                 if (tree.regrows > 0) {
-                    tree.state = "growing";
-                    tree.timer = tree.regrowSpeed;
-                    tree.regrows -= 1;
-                    tree.element.style.animation = `treeGrowAnimation ${tree.regrowSpeed/1000}s forwards`;
+                    tree.regrows--;                    
+                    createTree(tree.type, tree);
+
+                    tree.element.remove();
+                    delete trees[tree.id];
                 } else {
-                    tree.state = "idle";
-                    tree.clickable = false;
+                    tree.element.remove();
+                    delete trees[tree.id];
                 }
             }
             break;
