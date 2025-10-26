@@ -23,19 +23,9 @@ img {
 .tree {
     height: 70%;
     cursor: pointer;
-    animation: treeGrowAnimation 1.5s forwards;
 }
 
-@keyframes treeShakeAnimation { /* 1s infinite */
-    0%, 60%, 100% {
-        transform: scale(1); 
-    }
-    80% {
-        transform: scale(1.05); 
-    }
-}
-
-@keyframes treeGrowAnimation { /* 1.5s forwards */
+@keyframes treeGrowAnimation { /* forwards */
     0% {
         transform: translate(0px, 50%) scale(0); 
     }
@@ -44,7 +34,7 @@ img {
     }
 }
 
-@keyframes treeFallAnimation { /* 3s ease-in forwards */
+@keyframes treeFallAnimation { /* ease-in forwards */
     0% {
         transform: translate(0px), rotate(0deg); 
         opacity: 1;
