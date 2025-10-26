@@ -1,6 +1,9 @@
 const main = document.querySelector('.main');
+const animationScaleAmount = 0.075;
 
 const trees = {};
+
+const woodDisplays = document.querySelector(".wood");
 
 const wood = {
     temporary: 0,
@@ -26,14 +29,11 @@ function createTree(type, tree=null) {
     
     let centered = false;
     const treeElement = document.createElement('img');
-    switch(type) {
-        case "temporary":
-            treeElement.src = 'images/treeplaceholder.png';
-            break;
-        case "starter":
-            treeElement.src = 'images/treeplaceholder.png';
-            centered = true;
-            break;
+
+    treeElement.src = `images/trees/${type == "starter" ? "temporary" : type}/tree.png`;
+
+    if (type == "starter") {
+        centered = true;
     }
 
     treeElement.classList.add('tree');
@@ -108,14 +108,14 @@ function updateTrees(tree, deltaTime) {
                 tree.timer -= deltaTime;
 
                 let progress = 1 - (tree.timer / tree.clickedTime);
-                let scale = 1 + 0.05 * Math.sin(progress * Math.PI);
+                let scale = 1 + animationScaleAmount * Math.sin(progress * Math.PI);
                 tree.element.style.transform = `scale(${scale})`;
                 
                 if (tree.timer <= tree.clickedTime/2 && !tree.clickedThisShake) {
                     tree.clicks += 1;
                     tree.clickedThisShake = true;
                     wood[tree.type] += treeUpgrades.woodPerClick;
-                    console.log(wood);
+                    updateWoodDisplay(tree.type);
                 }
 
                 if (tree.timer <= 0) {
@@ -157,6 +157,12 @@ function updateTrees(tree, deltaTime) {
                 }
             break;
     }
+}
 
-
+function updateWoodDisplay(type="temporary") {
+    const display = woodDisplays.querySelector(`.wood-display.${type}`);
+    if (display) {
+        display.style.display = "flex";
+        display.querySelector(".wood-display-amount").textContent = wood[type];
+    }
 }
