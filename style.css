@@ -61,6 +61,7 @@ img {
     display: flex;
     flex-direction: column;
     align-items: center;
+    border-radius: 20px 0px 0px 20px;
 }
 
 .wood {
@@ -94,9 +95,11 @@ img {
 .shop-title {
     width: 100%;
     padding: 15px;
-    font-size: 32px;
+    text-align: center;
+    font-size: 36px;
     font-weight: bold;
     border-bottom: 2px solid #ffffff;
+    color: #e3dfda;
 }
 
 .shop-sections {
@@ -119,6 +122,14 @@ img {
     border-radius: 10px;
 }
 
+.shop-sections button:hover {
+    background-color: #dfd0c3;
+}
+
+.shop-sections button.selected {
+    background-color: #b8977d;
+}
+
 .shop {
     width: 100%;
     padding: 10px;
@@ -128,4 +139,8 @@ img {
     gap: 15px;
     overflow-y: auto;
     height: 100%;
+}
+
+.shop div {
+    display: none;
 }
