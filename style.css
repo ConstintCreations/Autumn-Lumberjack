@@ -1,0 +1,26 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #82a5e4;
+}
+
+img {
+    image-rendering: pixelated;
+}
+
+.tree {
+    height: 70%;
+    cursor: pointer;
+}
+
+.main {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
