@@ -99,20 +99,6 @@ function createTree(type, tree=null) {
     trees[id] = treeObj;
 }
 
-
-
-requestAnimationFrame(gameLoop);
-
-let lastTimestamp = 0;
-function gameLoop(timestamp) {
-    const deltaTime = timestamp - lastTimestamp;
-    lastTimestamp = timestamp;
-    for (const treeID in trees) {
-        updateTrees(trees[treeID], deltaTime);
-    }
-    requestAnimationFrame(gameLoop);
-}
-
 function updateTrees(tree, deltaTime) {
     switch (tree.state) {
         case "idle":

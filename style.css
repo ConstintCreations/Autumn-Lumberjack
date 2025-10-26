@@ -215,6 +215,15 @@ img {
     cursor: pointer;
 }
 
+.shop-item:hover {
+    background-color: #e3b07f;
+    border: 5px solid #a78455;
+}
+
+.shop-item.bought {
+    opacity: 0.7;
+}
+
 .shop-item-image {
     height: 80px;
 }
@@ -236,6 +245,16 @@ img {
 .shop-item-description {
     font-size: 14px;
     color: #f0e6d9;
+}
+
+.shop-item-stats {
+    font-size: 14px;
+    color: #f0e6d9;
+    margin-top: 5px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
 .shop-item-cost {

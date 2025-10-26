@@ -17,11 +17,50 @@ let shopItems = {
             timesBought: 0,
             costIncreaseRate: {
                 temporary: 0
-            }
+            },
+            multiplier: 1,
+            show: true,
+            showCondition: null
         },
+        
     },
     upgrades: {
-
+        maxClicks: {
+            name: "Wood Per Tree",
+            description: "Increases the amount of wood gained per tree.",
+            baseCost: {
+                temporary: 10,
+            },
+            cost: {
+                temporary: 10,
+            },
+            image: "images/shop/upgrades/maxClicks.png",
+            timesBought: 0,
+            costIncreaseRate: {
+                temporary: 5
+            },
+            multiBuy: true,
+            show: true,
+            showCondition: null
+        },
+        autoClick: {
+            name: "Auto Clicker",
+            description: "Automatically click trees for you.",
+            baseCost: {
+                temporary: 100,
+            },
+            cost: {
+                temporary: 100,
+            },
+            image: "images/shop/upgrades/autoClick.png",
+            timesBought: 0,
+            costIncreaseRate: {
+                temporary: 0
+            },
+            multiBuy: false,
+            show: false,
+            showCondition: () => { return false; }
+        },
     }
 }
 
@@ -29,8 +68,11 @@ function populateShop() {
     const treeSection = shop.querySelector('.shop-trees .shop-items');
     const upgradesSection = shop.querySelector('.shop-upgrades .shop-items');
 
+    treeSection.innerHTML = '';
+    upgradesSection.innerHTML = '';
+
     for (const [key, item] of Object.entries(shopItems.trees)) {
-        // Remove an Item: if (key === "temporary" && shopItems.trees[key].timesBought >= 0) continue;
+        if (item.show == false) continue;
 
         const itemElement = document.createElement('button');
         itemElement.classList.add('shop-item');
@@ -43,6 +85,10 @@ function populateShop() {
                 </div>
                 <div class="shop-item-description">
                     ${item.description}
+                </div>
+                <div class="shop-item-stats">
+                    <div>Times Bought: ${item.timesBought}</div>
+                    <div>Multiplier: x${item.multiplier}</div>
                 </div>
                 <div class="shop-item-cost">
                     ${item.cost.temporary ? `<div class="wood-cost temporary">${item.cost.temporary} <img class="shop-item-wood-icon" src="images/trees/temporary/wood.png"></div>` : ""}
@@ -57,6 +103,7 @@ function populateShop() {
     }
 
     for (const [key, item] of Object.entries(shopItems.upgrades)) {
+        if (item.show == false) continue;
         const itemElement = document.createElement('button');
         itemElement.classList.add('shop-item');
         itemElement.dataset.item = key;
@@ -69,11 +116,22 @@ function populateShop() {
                 <div class="shop-item-description">
                     ${item.description}
                 </div>
+                <div class="shop-item-stats">
+                    ${item.multiBuy ? `<div>Times Bought: ${item.timesBought}</div>` : (item.timesBought>0 ? `<div>Purchased</div>` : `<div>Not Purchased</div>`)}
+                    ${item.multiBuy && treeUpgrades[key] ? `<div>Current: ${treeUpgrades[key]}</div>` : ""}
+                </div>
                 <div class="shop-item-cost">
                     ${item.cost.temporary ? `<div class="wood-cost temporary">${item.cost.temporary} <img class="shop-item-wood-icon" src="images/trees/temporary/wood.png"></div>` : ""}
                 </div>
             </div>
         `;
+
+        if (item.multiBuy === false && item.timesBought > 0) {
+            itemElement.classList.add('bought');
+        }
+        itemElement.addEventListener('click', () => {
+            buyShopItem(key);
+        });
         upgradesSection.appendChild(itemElement);
     }
 }
@@ -95,8 +153,10 @@ function updateShopSection(section) {
 
 function buyShopItem(itemKey) {
     const item = shopItems.trees[itemKey] || shopItems.upgrades[itemKey];
-    let canAfford = true;
+    console.log("Buying item:", itemKey, item);
     if (!item) return;
+    let canAfford = true;
+    if (item.multiBuy === false && item.timesBought > 0) return;
 
     if (item.cost.temporary) {
         if (wood.temporary < item.cost.temporary) canAfford = false;
@@ -116,31 +176,36 @@ function buyShopItem(itemKey) {
         createTree(itemKey);
     }
 
-    updatePrices();
+    if (shopItems.upgrades[itemKey]) {
+        if (itemKey === "maxClicks") {
+            treeUpgrades.maxClicks += 1;
+        }
+    }
+
+    populateShop();
     saveGame(true);
 }
 
-function updatePrices() {
-    const treeSection = shop.querySelector('.shop-trees .shop-items');
-    const upgradesSection = shop.querySelector('.shop-upgrades .shop-items');
+function testShowConditions() {
+    for (const item in shopItems.trees) {
+        if (item.show) {
+            continue;
+        } else {
+            if (shopItems.trees[item].showCondition && shopItems.trees[item].showCondition()) {
+                shopItems.trees[item].show = true;
+                populateShop();
+            }
+        }
+    }
 
-    treeSection.querySelectorAll('.shop-item').forEach(itemElement => {
-        const itemKey = itemElement.dataset.item;
-        /* Remove an Item if (itemKey === "temporary" && shopItems.trees[itemKey].timesBought >= 0) {
-            itemElement.remove();
-            return;
-        }*/
-        const item = shopItems.trees[itemKey];
-        itemElement.querySelector('.shop-item-cost').innerHTML = `
-            ${item.cost.temporary ? `<div class="wood-cost temporary">${item.cost.temporary} <img class="shop-item-wood-icon" src="images/trees/temporary/wood.png"></div>` : ""}
-        `;
-    });
-
-    upgradesSection.querySelectorAll('.shop-item').forEach(itemElement => {
-        const itemKey = itemElement.dataset.item;
-        const item = shopItems.upgrades[itemKey];
-        itemElement.querySelector('.shop-item-cost').innerHTML = `
-            ${item.cost.temporary ? `<div class="wood-cost temporary">${item.cost.temporary} <img class="shop-item-wood-icon" src="images/trees/temporary/wood.png"></div>` : ""}
-        `;
-    });
+    for (const item in shopItems.upgrades) {
+        if (item.show) {
+            continue;
+        } else {
+            if (shopItems.upgrades[item].showCondition && shopItems.upgrades[item].showCondition()) {
+                shopItems.upgrades[item].show = true;
+                populateShop();
+            }
+        }
+    }
 }

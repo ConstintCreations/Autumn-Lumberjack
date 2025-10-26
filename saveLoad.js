@@ -46,7 +46,6 @@ function loadGame() {
                 }
             }
             createTree(gameData.trees[tree].type, gameData.trees[tree]);
-            console.log("Loaded tree:", gameData.trees[tree]);
         }
 
         for (const type in wood) {
