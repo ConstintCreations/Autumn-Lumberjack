@@ -11,8 +11,8 @@ let wood = {
 
 let treeUpgrades = {
     woodPerClick: 1,
-    maxClicks: 10,
-    regrows: 1,
+    maxClicks: 5,
+    regrows: 0,
     regrowSpeed: 5000,
     fallSpeed: 3000,
     shakeDelay: 1000,
@@ -34,8 +34,6 @@ document.addEventListener('keydown', (e) => {
         location.reload();
     }
 });
-
-loadGame();
 
 function randomTreeID() {
     return "Tree-" + Date.now() + Math.random().toString(36).substring(2, 15);
@@ -195,67 +193,3 @@ function updateWoodDisplay(type="temporary") {
         display.querySelector(".wood-display-amount").textContent = wood[type];
     }
 }
-
-setInterval(() => {
-    saveGame();
-}, 30000);
-
-function saveGame() {
-    const savingIndicator = document.querySelector('.saving-indicator');
-
-    const treeData = {};
-    for (const treeID in trees) {
-        const { element, ...data } = trees[treeID];
-        treeData[treeID] = data;
-    }
-
-    const gameData = {
-        wood: wood,
-        treeUpgrades: treeUpgrades,
-        trees: treeData,
-    };
-
-    console.log("Game saved:", gameData);
-
-    localStorage.setItem('autumnLumberjackSave', JSON.stringify(gameData));
-
-    savingIndicator.style.animation = 'savingAnimation 1s ease-in-out forwards';
-
-    setTimeout(() => {
-        savingIndicator.style.animation = '';
-    }, 1000);
-}
-
-function loadGame() {
-    const savedData = localStorage.getItem('autumnLumberjackSave');
-    if (savedData) {
-        const gameData = JSON.parse(savedData);
-        wood = gameData.wood;
-        treeUpgrades = gameData.treeUpgrades;
-
-        for (const tree in gameData.trees) {
-            if (gameData.trees[tree].state === "falling") {
-                if (gameData.trees[tree].regrows > 0) {
-                    gameData.trees[tree].regrows--;
-                } else {
-                    continue;
-                }
-            }
-            createTree(gameData.trees[tree].type, gameData.trees[tree]);
-            console.log("Loaded tree:", gameData.trees[tree]);
-        }
-
-        for (const type in wood) {
-            if (wood.hasOwnProperty(type)) {
-                updateWoodDisplay(type);
-            }
-        }
-
-    } else {
-        createTree("starter");
-    }
-}
-
-window.addEventListener('beforeunload', () => {
-    if (saveOnExit) saveGame();
-});

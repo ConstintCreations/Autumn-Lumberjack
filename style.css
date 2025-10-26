@@ -11,6 +11,7 @@ body {
     height: 100vh;
     display: flex;
     flex-direction: row;
+    overflow: hidden;
 }
 
 img {
@@ -160,10 +161,97 @@ img {
     flex-direction: column;
     align-items: center;
     gap: 15px;
-    overflow-y: auto;
     height: 100%;
+    overflow: hidden;
 }
 
-.shop div {
+.shop .section {
     display: none;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 15px;
+    padding: 10px;
+}
+
+.shop-section-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #e3dfda;
+}
+
+.shop-items {
+    overflow: auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.shop-items::-webkit-scrollbar {
+    width: 8px;
+}
+
+.shop-items::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.3);
+    border-radius: 4px;
+}
+
+.shop-item {
+    width: 90%;
+    padding: 15px;
+    border: 5px solid #977445;
+    border-radius: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    gap: 20px;
+    align-items: center;
+    background-color: #d3a06f;
+    cursor: pointer;
+}
+
+.shop-item-image {
+    height: 80px;
+}
+
+.shop-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    text-align: left;
+    max-width: 240px;
+}
+
+.shop-item-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.shop-item-description {
+    font-size: 14px;
+    color: #f0e6d9;
+}
+
+.shop-item-cost {
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.wood-cost {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 3px;
 }
