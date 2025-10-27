@@ -30,13 +30,6 @@ document.addEventListener('keydown', (e) => {
         e.preventDefault();
         saveGame();
     }
-
-    if (e.key === 'x') {
-        e.preventDefault();
-        localStorage.clear();
-        saveOnExit = false;
-        location.reload();
-    }
 });
 
 function randomTreeID() {
