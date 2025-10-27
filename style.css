@@ -286,3 +286,11 @@ img {
     font-size: 24px;
     display: none;
 }
+
+.shop-item-select {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    border-radius: 8px;
+    background-color: #d3a06f;
+}

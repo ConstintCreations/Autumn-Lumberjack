@@ -2,6 +2,8 @@ const sidebar = document.querySelector('.sidebar');
 const shopSections = sidebar.querySelector('.shop-sections');
 const shop = sidebar.querySelector('.shop');
 
+let checkedItems = [];
+
 let shopItems = {
     trees: {
         whiteOak: {
@@ -276,6 +278,7 @@ function populateShop() {
         itemElement.classList.add('shop-item');
         itemElement.dataset.item = key;
         itemElement.innerHTML = `
+            ${treeUpgrades.autoBuy ? (checkedItems && checkedItems.includes(key) ? `<input type="checkbox" checked class="shop-item-select" data-item="${key}">` : `<input type="checkbox" class="shop-item-select" data-item="${key}">`) : ''}
             <img class="shop-item-image" src="${item.image}">
             <div class="shop-item-info">
                 <div class="shop-item-name">
@@ -300,6 +303,24 @@ function populateShop() {
         itemElement.addEventListener('click', () => {
             buyShopItem(key);
         });
+
+        const checkboxUp = itemElement.querySelector('.shop-item-select');
+        if (checkboxUp) {
+            checkboxUp.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+            checkboxUp.addEventListener('change', (e) => {
+                e.stopPropagation();
+                const itemKey = checkboxUp.dataset.item;
+                if (checkboxUp.checked) {
+                    if (!checkedItems.includes(itemKey)) checkedItems.push(itemKey);
+                } else {
+                    const idx = checkedItems.indexOf(itemKey);
+                    if (idx !== -1) checkedItems.splice(idx, 1);
+                }
+            });
+        }
+
         treeSection.appendChild(itemElement);
     }
 
@@ -309,6 +330,7 @@ function populateShop() {
         itemElement.classList.add('shop-item');
         itemElement.dataset.item = key;
         itemElement.innerHTML = `
+            ${treeUpgrades.autoBuy ? (checkedItems && checkedItems.includes(key) ? `<input type="checkbox" checked class="shop-item-select" data-item="${key}">` : `<input type="checkbox" class="shop-item-select" data-item="${key}">`) : ''}
             <img class="shop-item-image" src="${item.image}">
             <div class="shop-item-info">
                 <div class="shop-item-name">
@@ -337,6 +359,24 @@ function populateShop() {
                 buyShopItem(key);
             });
         }
+
+        const checkboxUp = itemElement.querySelector('.shop-item-select');
+        if (checkboxUp) {
+            checkboxUp.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+            checkboxUp.addEventListener('change', (e) => {
+                e.stopPropagation();
+                const itemKey = checkboxUp.dataset.item;
+                if (checkboxUp.checked) {
+                    if (!checkedItems.includes(itemKey)) checkedItems.push(itemKey);
+                } else {
+                    const idx = checkedItems.indexOf(itemKey);
+                    if (idx !== -1) checkedItems.splice(idx, 1);
+                }
+            });
+        }
+
         upgradesSection.appendChild(itemElement);
     }
 }
@@ -358,7 +398,6 @@ function updateShopSection(section) {
 
 function buyShopItem(itemKey) {
     const item = shopItems.trees[itemKey] || shopItems.upgrades[itemKey];
-    console.log("Buying item:", itemKey, item);
     if (!item) return;
     let canAfford = true;
 
@@ -424,7 +463,6 @@ function testShowConditions() {
                 shopItems.trees[item].show = true;
                 populateShop();
                 saveGame(true);
-                console.log("Showing tree item:", item);
             }
         }
     }

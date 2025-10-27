@@ -8,6 +8,7 @@ function gameLoop(timestamp) {
         updateTrees(trees[treeID], deltaTime);
     }
     softLockPrevention(deltaTime);
+    autoBuy(deltaTime);
     requestAnimationFrame(gameLoop);
 }
 
@@ -34,5 +35,17 @@ function softLockPrevention(deltaTime) {
                 softLockPreventionTimer.style.display = "none";
             }
         };
+    }
+}
+
+let autoBuyTimer = 0;
+function autoBuy(deltaTime) {
+    if (!treeUpgrades.autoBuy) return;
+    autoBuyTimer += deltaTime;
+    if (autoBuyTimer >= 500) {
+        autoBuyTimer = 0;
+        for (const itemKey of checkedItems) {
+            buyShopItem(itemKey);
+        }
     }
 }

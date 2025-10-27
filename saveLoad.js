@@ -19,6 +19,7 @@ function saveGame(silent=false) {
         shopItems: shopItems
     };
 
+
     localStorage.setItem('autumnLumberjackSave', JSON.stringify(gameData));
 
     if (silent) return;
