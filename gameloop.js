@@ -28,7 +28,6 @@ function softLockPrevention(deltaTime) {
             softLockPreventionTime += deltaTime;
             softLockPreventionTimer.style.display = "block";
             softLockPreventionTimer.textContent = `New White Oak in: ${Math.max(0, Math.ceil((30000 - softLockPreventionTime)/1000))}s`;
-            console.log(softLockPreventionTime);
             if (softLockPreventionTime >= 30000) {
                 createTree("whiteOak");
                 softLockPreventionTime = 0;
@@ -49,6 +48,48 @@ function autoBuy(deltaTime) {
         autoBuyTimer = 0;
         for (const itemKey of checkedItems) {
             buyShopItem(itemKey);
+        }
+    }
+}
+
+/* Commands
+    give wood [type | all] [amount]
+    unlock [itemKey | all]
+    reset
+*/
+
+function runCommand(command) {
+    const devConsoleInput = document.querySelector('.dev-console-input');
+    devConsoleInput.value = '';
+    if (devMode) {
+        command.trim().toLowerCase(); 
+        const parts = command.split(" ");
+        if (parts[0] === "give" && parts[1] === "wood") {
+            let amount = parseInt(parts[3]);
+            if (isNaN(amount)) amount = 0;
+            if (parts[2] === "all") {
+                for (const type in wood) {
+                    wood[type] += amount;
+                    updateWoodDisplay(type);
+                }
+            } else if (wood.hasOwnProperty(parts[2])) {
+                wood[parts[2]] += amount;
+                updateWoodDisplay(parts[2]);
+            }
+        } else if (parts[0] === "unlock") {
+            if (parts[1] === "all") {
+                for (const itemKey in shopItems) {
+                    shopItems[itemKey].show = true;
+                    updateShopItemDisplay(itemKey);
+                }
+            } else if (shopItems.hasOwnProperty(parts[1])) {
+                shopItems[parts[1]].show = true;
+                updateShopItemDisplay(parts[1]);
+            }
+        } else if (parts[0] === "reset") {
+            saveOnExit = false;
+            localStorage.clear();
+            location.reload();
         }
     }
 }

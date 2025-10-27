@@ -6,6 +6,10 @@
     user-select: none;
 }
 
+*:focus {
+    outline: none;
+}
+
 body {
     background-color: #44af79;
     width: 100%;
@@ -293,4 +297,51 @@ img {
     cursor: pointer;
     border-radius: 8px;
     background-color: #d3a06f;
+}
+
+.dev-console {
+    position: fixed;
+    bottom: 20px;
+    left: 35%;
+    translate: -50%;
+    display: none;
+    gap: 10px;
+}
+
+.dev-console-input {
+    width: 300px;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #977445;
+    background-color: #d9c2ad;
+    border-radius: 12px;
+    font-weight: bold;
+    color: #624622;
+}
+
+.dev-console-submit {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border: 2px solid #977445;
+    background-color: #d9c2ad;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #624622;
+}
+
+.dev-console-input:hover {
+    border: 2px solid #a78455;
+    background-color: #dfd0c3;
+}
+
+.dev-console-input:focus {
+    border: 2px solid #a78455;
+    background-color: #dfd0c3;
+}
+
+.dev-console-submit:hover {
+    border: 2px solid #a78455;
+    background-color: #dfd0c3;
 }

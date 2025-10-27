@@ -20,10 +20,13 @@ let treeUpgrades = {
     fallSpeed: 3000,
     shakeDelay: 1000,
     autoClick: false,
-    autoBuy: false,
+    //autoBuy: false,
 }
 
 let saveOnExit = true;
+
+let devMode = false;
+let devConsole = false;
 
 document.addEventListener('keydown', (e) => {
     if (e.key === 's' && (e.ctrlKey || e.metaKey)) {
@@ -35,6 +38,29 @@ document.addEventListener('keydown', (e) => {
         saveOnExit = false;
         localStorage.clear();
         location.reload();
+    }
+    if (e.key === '`' && devMode) {
+        e.preventDefault();
+        const devConsoleElement = document.querySelector('.dev-console');
+        devConsoleElement.style.display = devConsoleElement.style.display === 'flex' ? 'none' : 'flex';
+        devConsole = !devConsole;
+        if (devConsoleElement.style.display === 'flex') {
+            document.querySelector('.dev-console-input').focus();
+        }
+    }
+
+    if (e.key === 'Enter' && devMode && devConsole) {
+        const consoleInput = document.querySelector('.dev-console-input');
+        if (document.activeElement === consoleInput) {
+            runCommand(consoleInput.value);
+        }
+    }
+});
+
+document.querySelector('.dev-console-submit').addEventListener('click', () => {
+    if (devMode) {
+        const consoleInput = document.querySelector('.dev-console-input');
+        runCommand(consoleInput.value);
     }
 });
 

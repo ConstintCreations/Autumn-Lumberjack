@@ -234,17 +234,17 @@ let shopItems = {
             current: () => { return treeUpgrades.woodPerClick + " Wood"; },
             max: null
         },
-        autoBuy: {
+        /*autoBuy: {
             name: "Auto Buyer",
             description: "Allows automatic purchasing of shop items.",
             baseCost: {
-                whiteOak: 1000,
+                whiteOak: 750,
                 sugarMaple: 500,
                 cherryBirch: 250,
                 blackWalnut: 100,
             },
             cost: {
-                whiteOak: 1000,
+                whiteOak: 750,
                 sugarMaple: 500,
                 cherryBirch: 250,
                 blackWalnut: 100,
@@ -260,7 +260,7 @@ let shopItems = {
             show: false,
             showCondition: () => { return wood.blackWalnut > 0 },
             max: 1
-        },
+        },*/
     }
 }
 
@@ -443,9 +443,9 @@ function buyShopItem(itemKey) {
         if (itemKey === "woodPerClick") {
             treeUpgrades.woodPerClick += 1;
         }
-        if (itemKey === "autoBuy") {
+        /*if (itemKey === "autoBuy") {
             treeUpgrades.autoBuy = true;
-        }
+        }*/
     }
 
     populateShop();
