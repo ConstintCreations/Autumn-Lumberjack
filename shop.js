@@ -152,10 +152,10 @@ let shopItems = {
             name: "Auto Chopper",
             description: "Automatically chops trees for you.",
             baseCost: {
-                sugarMaple: 100,
+                sugarMaple: 25,
             },
             cost: {
-                sugarMaple: 100,
+                sugarMaple: 25,
             },
             image: "images/shop/upgrades/autoClick.png",
             timesBought: 0,

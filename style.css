@@ -275,3 +275,14 @@ img {
     align-items: center;
     gap: 3px;
 }
+
+.soft-lock-prevention-timer {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    color: #ffffff;
+    font-weight: bold;
+    padding: 15px;
+    font-size: 24px;
+    display: none;
+}
