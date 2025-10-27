@@ -100,10 +100,10 @@ function createTree(type, tree=null) {
     treeElement.dataset.id = id;
 
     if (centered) {
-        treeElement.style.left = `calc(50% - 2.5vh)`;
+        treeElement.style.left = `calc(50% - 5vh)`;
         treeElement.style.top = `calc(50% - 5vh)`;
     } else {
-        treeElement.style.left = `${Math.random() * ((window.innerWidth *0.7) - 0.05 * window.innerHeight)}px`;
+        treeElement.style.left = `${Math.random() * ((window.innerWidth *0.7) - 0.1 * window.innerHeight)}px`;
         treeElement.style.top = `${Math.random() * (window.innerHeight - 0.1 * window.innerHeight)}px`;
     }
 

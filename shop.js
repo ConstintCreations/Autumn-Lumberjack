@@ -129,7 +129,7 @@ let shopItems = {
             show: false,
             showCondition: () => { return wood.whiteOak > 0; },
             current: () => { return treeUpgrades.regrowSpeed/1000 + " Seconds"; },
-            max: 25
+            max: 10
         },
         fallSpeed: {
             name: "Tree Fall Speed",
@@ -148,7 +148,7 @@ let shopItems = {
             show: false,
             showCondition: () => { return wood.whiteOak > 0; },
             current: () => { return treeUpgrades.fallSpeed/1000 + " Seconds"; },
-            max: 25
+            max: 10
         },
         autoClick: {
             name: "Auto Chopper",
@@ -183,7 +183,7 @@ let shopItems = {
                 sugarMaple: 30
             },
             show: false,
-            showCondition: () => { return wood.sugarMaple > 0 && shopItems.upgrades.autoClick.timesBought > 0; },
+            showCondition: () => { return shopItems.upgrades.autoClick.timesBought > 0; },
             current: () => { return treeUpgrades.shakeDelay/1000 + " Seconds"; },
             max: 10
         },
