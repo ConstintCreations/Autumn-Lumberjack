@@ -55,6 +55,7 @@ function autoBuy(deltaTime) {
 /* Commands
     give wood [type | all] [amount]
     unlock [itemKey | all]
+    buy [itemKey]
     reset
 */
 
@@ -78,14 +79,23 @@ function runCommand(command) {
             }
         } else if (parts[0] === "unlock") {
             if (parts[1] === "all") {
-                for (const itemKey in shopItems) {
-                    shopItems[itemKey].show = true;
-                    updateShopItemDisplay(itemKey);
+                for (const itemKey in shopItems.trees) {
+                    console.log("unlocking " + itemKey);
+                    unlockItem(itemKey);
                 }
-            } else if (shopItems.hasOwnProperty(parts[1])) {
-                shopItems[parts[1]].show = true;
-                updateShopItemDisplay(parts[1]);
+                for (const itemKey in shopItems.upgrades) {
+                    console.log("unlocking " + itemKey);
+                    unlockItem(itemKey);
+                }
+            } else if (shopItems.trees.hasOwnProperty(parts[1])) {
+                console.log("unlocking " + parts[1]);
+                unlockItem(parts[1]);
+            } else if (shopItems.upgrades.hasOwnProperty(parts[1])) {
+                console.log("unlocking " + parts[1]);
+                unlockItem(parts[1]);
             }
+        } else if (parts[0] === "buy") {
+            buyShopItem(parts[1], true);
         } else if (parts[0] === "reset") {
             saveOnExit = false;
             localStorage.clear();

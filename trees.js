@@ -25,7 +25,7 @@ let treeUpgrades = {
 
 let saveOnExit = true;
 
-let devMode = false;
+let devMode = true;
 let devConsole = false;
 
 document.addEventListener('keydown', (e) => {
@@ -127,11 +127,12 @@ function createTree(type, tree=null) {
         autoClick: (tree ? tree.autoClick : treeUpgrades.autoClick),
     }
 
-    treeObj.maxClicks *= multiplier;
-    treeObj.regrows *= multiplier;
-    treeObj.regrowSpeed /= multiplier;
-    treeObj.fallSpeed /= multiplier;
-    treeObj.shakeDelay /= multiplier;
+    if (!tree) {
+        treeObj.maxClicks *= multiplier;
+        treeObj.regrowSpeed /= multiplier;
+        treeObj.fallSpeed /= multiplier;
+        treeObj.shakeDelay /= multiplier;
+    }
 
     if (treeObj.state === "growing") {
         const randomFactor = Math.random() * 0.2 * treeObj.regrowSpeed;

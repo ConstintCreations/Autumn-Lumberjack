@@ -206,7 +206,7 @@ let shopItems = {
             },
             show: false,
             showCondition: () => { return wood.sugarMaple > 0 },
-            current: () => { return treeUpgrades.regrows + " Regrows"; },
+            current: () => { return treeUpgrades.regrows + " Regrow" + shopItems.upgrades.regrows.timesBought > 1 ? "s" : ""; },
             max: 10
         },
         woodPerClick: {
@@ -396,7 +396,7 @@ function updateShopSection(section) {
     shop.querySelector(`.${section}`).style.display = 'flex';
 }
 
-function buyShopItem(itemKey) {
+function buyShopItem(itemKey, force=false) {
     const item = shopItems.trees[itemKey] || shopItems.upgrades[itemKey];
     if (!item) return;
     let canAfford = true;
@@ -407,12 +407,14 @@ function buyShopItem(itemKey) {
         }
     }
 
+    if (force) canAfford = true;
+
     if (!canAfford) return;
 
     item.timesBought++;
 
     for (const resource in item.cost) {
-        wood[resource] -= item.cost[resource];
+        if (!force) wood[resource] -= item.cost[resource];
         updateWoodDisplay(resource);
         item.cost[resource] = Math.floor(item.baseCost[resource] + (item.timesBought  * item.costIncreaseRate[resource]));
     }
@@ -460,9 +462,7 @@ function testShowConditions() {
             continue;
         } else {
             if (shopItems.trees[item].showCondition && shopItems.trees[item].showCondition()) {
-                shopItems.trees[item].show = true;
-                populateShop();
-                saveGame(true);
+                unlockItem(item);
             }
         }
     }
@@ -472,10 +472,16 @@ function testShowConditions() {
             continue;
         } else {
             if (shopItems.upgrades[item].showCondition && shopItems.upgrades[item].showCondition()) {
-                shopItems.upgrades[item].show = true;
-                populateShop();
-                saveGame(true);
+                unlockItem(item);
             }
         }
     }
+}
+
+function unlockItem(itemKey) {
+    const item = shopItems.trees[itemKey] || shopItems.upgrades[itemKey];
+    if (!item) return;
+    item.show = true;
+    populateShop();
+    saveGame(true);
 }
