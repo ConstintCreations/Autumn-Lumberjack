@@ -7,6 +7,5 @@ function gameLoop(timestamp) {
     for (const treeID in trees) {
         updateTrees(trees[treeID], deltaTime);
     }
-    testShowConditions();
     requestAnimationFrame(gameLoop);
 }

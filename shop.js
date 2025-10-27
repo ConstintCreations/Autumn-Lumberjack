@@ -4,62 +4,260 @@ const shop = sidebar.querySelector('.shop');
 
 let shopItems = {
     trees: {
-        temporary: {
-            name: "Temporary Tree",
-            description: "A tree that will disappear after a while.",
+        whiteOak: {
+            name: "White Oak",
+            description: "A sturdy autumn tree that provides decent wood.",
             baseCost: {
-                temporary: 3,
+                whiteOak: 3,
             },
             cost: {
-                temporary: 3,
+                whiteOak: 3,
             },
-            image: "images/trees/temporary/tree.png",
+            image: "images/trees/whiteOak/tree.png",
             timesBought: 0,
             costIncreaseRate: {
-                temporary: 0
+                whiteOak: 0
             },
             multiplier: 1,
             show: true,
-            showCondition: null
+            showCondition: null,
+            max: null
         },
-        
+        sugarMaple: {
+            name: "Sugar Maple",
+            description: "A sweet maple that gives a little more wood.",
+            baseCost: {
+                whiteOak: 10,
+            },
+            cost: {
+                whiteOak: 10,
+            },
+            image: "images/trees/sugarMaple/tree.png",
+            timesBought: 0,
+            costIncreaseRate: {
+                whiteOak: 5
+            },
+            multiplier: 1.25,
+            show: false,
+            showCondition: () => { return wood.whiteOak > 0; },
+            max: null
+        },
+        cherryBirch: {
+            name: "Cherry Birch",
+            description: "A beautiful birch tree with stronger wood.",
+            baseCost: {
+                whiteOak: 30,
+                sugarMaple: 20,
+            },
+            cost: {
+                whiteOak: 30,
+                sugarMaple: 20,
+            },
+            image: "images/trees/whiteOak/tree.png",
+            timesBought: 0,
+            costIncreaseRate: {
+                whiteOak: 20,
+                sugarMaple: 10
+            },
+            multiplier: 1.5,
+            show: false,
+            showCondition: () => { return wood.sugarMaple > 0; },
+            max: null
+        },
+        blackWalnut: {
+            name: "Black Walnut",
+            description: "A rare walnut tree with the finest wood in the land.",
+            baseCost: {
+                whiteOak: 50,
+                sugarMaple: 30,
+                cherryBirch: 20,
+            },
+            cost: {
+                whiteOak: 50,
+                sugarMaple: 30,
+                cherryBirch: 20,
+            },
+            image: "images/trees/whiteOak/tree.png",
+            timesBought: 0,
+            costIncreaseRate: {
+                whiteOak: 30,
+                sugarMaple: 20,
+                cherryBirch: 10
+            },
+            multiplier: 2,
+            show: false,
+            showCondition: () => { return wood.cherryBirch > 0; },
+            max: null
+        },
     },
     upgrades: {
         maxClicks: {
             name: "Wood Per Tree",
             description: "Increases the amount of wood gained per tree.",
             baseCost: {
-                temporary: 10,
+                whiteOak: 10,
             },
             cost: {
-                temporary: 10,
+                whiteOak: 10,
             },
             image: "images/shop/upgrades/maxClicks.png",
             timesBought: 0,
             costIncreaseRate: {
-                temporary: 5
+                whiteOak: 5
             },
-            multiBuy: true,
-            show: true,
-            showCondition: null
+            show: false,
+            showCondition: () => { return wood.whiteOak > 0; },
+            current: () => { return treeUpgrades.maxClicks + " Wood"; },
+            max: null
         },
-        autoClick: {
-            name: "Auto Clicker",
-            description: "Automatically click trees for you.",
+        regrowSpeed: {
+            name: "Tree Grow Speed",
+            description: "Decreases the time it takes for trees to grow.",
             baseCost: {
-                temporary: 100,
+                whiteOak: 10,
             },
             cost: {
-                temporary: 100,
+                whiteOak: 10,
+            },
+            image: "images/shop/upgrades/regrowSpeed.png",
+            timesBought: 0,
+            costIncreaseRate: {
+                whiteOak: 25
+            },
+            show: false,
+            showCondition: () => { return wood.whiteOak > 0; },
+            current: () => { return treeUpgrades.regrowSpeed/1000 + " Seconds"; },
+            max: 25
+        },
+        fallSpeed: {
+            name: "Tree Fall Speed",
+            description: "Decreases the time it takes for trees to fall when chopped.",
+            baseCost: {
+                whiteOak: 10,
+            },
+            cost: {
+                whiteOak: 10,
+            },
+            image: "images/shop/upgrades/fallSpeed.png",
+            timesBought: 0,
+            costIncreaseRate: {
+                whiteOak: 25
+            },
+            show: false,
+            showCondition: () => { return wood.whiteOak > 0; },
+            current: () => { return treeUpgrades.fallSpeed/1000 + " Seconds"; },
+            max: 25
+        },
+        autoClick: {
+            name: "Auto Chopper",
+            description: "Automatically chops trees for you.",
+            baseCost: {
+                sugarMaple: 100,
+            },
+            cost: {
+                sugarMaple: 100,
             },
             image: "images/shop/upgrades/autoClick.png",
             timesBought: 0,
             costIncreaseRate: {
-                temporary: 0
+                sugarMaple: 0
             },
-            multiBuy: false,
             show: false,
-            showCondition: () => { return false; }
+            showCondition: () => { return wood.sugarMaple > 0; },
+            max: 1
+        },
+        shakeDelay: {
+            name: "Auto Chopper Speed",
+            description: "Decreases the delay between automatic chops.",
+            baseCost: {
+                sugarMaple: 10,
+            },
+            cost: {
+                sugarMaple: 10,
+            },
+            image: "images/shop/upgrades/shakeDelay.png",
+            timesBought: 0,
+            costIncreaseRate: {
+                sugarMaple: 30
+            },
+            show: false,
+            showCondition: () => { return wood.sugarMaple > 0 && shopItems.upgrades.autoClick.timesBought > 0; },
+            current: () => { return treeUpgrades.shakeDelay/1000 + " Seconds"; },
+            max: 10
+        },
+        regrows: {
+            name: "Tree Regrows",
+            description: "Allows trees to regrow after being chopped down.",
+            baseCost: {
+                sugarMaple: 50,
+                cherryBirch: 0,
+            },
+            cost: {
+                sugarMaple: 50,
+                cherryBirch: 0,
+            },
+            image: "images/shop/upgrades/regrows.png",
+            timesBought: 0,
+            costIncreaseRate: {
+                sugarMaple: 30,
+                cherryBirch: 10
+            },
+            show: false,
+            showCondition: () => { return wood.sugarMaple > 0 },
+            current: () => { return treeUpgrades.regrows + " Regrows"; },
+            max: 10
+        },
+        woodPerClick: {
+            name: "Wood Per Chop",
+            description: "Increases the number of wood per chop of a tree.",
+            baseCost: {
+                whiteOak: 30,
+                sugarMaple: 20,
+                cherryBirch: 10,
+            },
+            cost: {
+                whiteOak: 30,
+                sugarMaple: 20,
+                cherryBirch: 10,
+            },
+            image: "images/shop/upgrades/woodPerClick.png",
+            timesBought: 0,
+            costIncreaseRate: {
+                whiteOak: 15,
+                sugarMaple: 10,
+                cherryBirch: 5,
+            },
+            show: false,
+            showCondition: () => { return wood.cherryBirch > 0 },
+            current: () => { return treeUpgrades.woodPerClick + " Wood"; },
+            max: null
+        },
+        autoBuy: {
+            name: "Auto Buyer",
+            description: "Allows automatic purchasing of shop items.",
+            baseCost: {
+                whiteOak: 1000,
+                sugarMaple: 500,
+                cherryBirch: 250,
+                blackWalnut: 100,
+            },
+            cost: {
+                whiteOak: 1000,
+                sugarMaple: 500,
+                cherryBirch: 250,
+                blackWalnut: 100,
+            },
+            image: "images/shop/upgrades/autoBuy.png",
+            timesBought: 0,
+            costIncreaseRate: {
+                whiteOak: 0,
+                sugarMaple: 0,
+                cherryBirch: 0,
+                blackWalnut: 0,
+            },
+            show: false,
+            showCondition: () => { return wood.blackWalnut > 0 },
+            max: 1
         },
     }
 }
@@ -91,7 +289,10 @@ function populateShop() {
                     <div>Multiplier: x${item.multiplier}</div>
                 </div>
                 <div class="shop-item-cost">
-                    ${item.cost.temporary ? `<div class="wood-cost temporary">${item.cost.temporary} <img class="shop-item-wood-icon" src="images/trees/temporary/wood.png"></div>` : ""}
+                    ${Object.entries(item.cost).map(([resource, amount]) => {
+                        if (amount <= 0) return '';
+                        return `<div class="wood-cost ${resource}">${amount} <img class="shop-item-wood-icon" src="images/trees/${resource}/wood.png"></div>`;
+                    }).join('')}
                 </div>
             </div>
         `;
@@ -117,21 +318,25 @@ function populateShop() {
                     ${item.description}
                 </div>
                 <div class="shop-item-stats">
-                    ${item.multiBuy ? `<div>Times Bought: ${item.timesBought}</div>` : (item.timesBought>0 ? `<div>Purchased</div>` : `<div>Not Purchased</div>`)}
-                    ${item.multiBuy && treeUpgrades[key] ? `<div>Current: ${treeUpgrades[key]}</div>` : ""}
+                    ${item.max && item.max == 1 ? (item.timesBought == item.max ? `<div>Purchased</div>` : `<div>Not Purchased</div>`) : `<div>Times Bought: ${item.timesBought} ${item.max && item.timesBought == item.max ? "(max)" : ""}</div>`}
+                    ${item.current ? `<div>Current: ${item.current()}</div>` : ""}
                 </div>
                 <div class="shop-item-cost">
-                    ${item.cost.temporary ? `<div class="wood-cost temporary">${item.cost.temporary} <img class="shop-item-wood-icon" src="images/trees/temporary/wood.png"></div>` : ""}
+                    ${Object.entries(item.cost).map(([resource, amount]) => {
+                        if (amount <= 0) return '';
+                        return `<div class="wood-cost ${resource}">${amount} <img class="shop-item-wood-icon" src="images/trees/${resource}/wood.png"></div>`;
+                    }).join('')}
                 </div>
             </div>
         `;
 
-        if (item.multiBuy === false && item.timesBought > 0) {
+        if (item.max && item.timesBought == item.max) {
             itemElement.classList.add('bought');
+        } else {
+            itemElement.addEventListener('click', () => {
+                buyShopItem(key);
+            });
         }
-        itemElement.addEventListener('click', () => {
-            buyShopItem(key);
-        });
         upgradesSection.appendChild(itemElement);
     }
 }
@@ -156,20 +361,21 @@ function buyShopItem(itemKey) {
     console.log("Buying item:", itemKey, item);
     if (!item) return;
     let canAfford = true;
-    if (item.multiBuy === false && item.timesBought > 0) return;
 
-    if (item.cost.temporary) {
-        if (wood.temporary < item.cost.temporary) canAfford = false;
+    for (const resource in item.cost) {
+        if (wood[resource] < item.cost[resource]) {
+            canAfford = false;
+        }
     }
 
     if (!canAfford) return;
 
     item.timesBought++;
 
-    if (item.cost.temporary) {
-        wood.temporary -= item.cost.temporary;
-        updateWoodDisplay('temporary');
-        item.cost.temporary = Math.floor(item.baseCost.temporary + (item.timesBought  * item.costIncreaseRate.temporary));
+    for (const resource in item.cost) {
+        wood[resource] -= item.cost[resource];
+        updateWoodDisplay(resource);
+        item.cost[resource] = Math.floor(item.baseCost[resource] + (item.timesBought  * item.costIncreaseRate[resource]));
     }
 
     if (shopItems.trees[itemKey]) {
@@ -180,10 +386,33 @@ function buyShopItem(itemKey) {
         if (itemKey === "maxClicks") {
             treeUpgrades.maxClicks += 1;
         }
+        if (itemKey === "regrowSpeed") {
+            treeUpgrades.regrowSpeed -= 250;
+        }
+        if (itemKey === "fallSpeed") {
+            treeUpgrades.fallSpeed -= 150;
+        }
+        if (itemKey === "autoClick") {
+            treeUpgrades.autoClick = true;
+        }
+        if (itemKey === "shakeDelay") {
+            treeUpgrades.shakeDelay -= 50;
+        }
+        if (itemKey === "regrows") {
+            treeUpgrades.regrows += 1;
+        }
+        if (itemKey === "woodPerClick") {
+            treeUpgrades.woodPerClick += 1;
+        }
+        if (itemKey === "autoBuy") {
+            treeUpgrades.autoBuy = true;
+        }
     }
 
     populateShop();
     saveGame(true);
+
+    testShowConditions();
 }
 
 function testShowConditions() {
@@ -194,6 +423,8 @@ function testShowConditions() {
             if (shopItems.trees[item].showCondition && shopItems.trees[item].showCondition()) {
                 shopItems.trees[item].show = true;
                 populateShop();
+                saveGame(true);
+                console.log("Showing tree item:", item);
             }
         }
     }
@@ -205,6 +436,7 @@ function testShowConditions() {
             if (shopItems.upgrades[item].showCondition && shopItems.upgrades[item].showCondition()) {
                 shopItems.upgrades[item].show = true;
                 populateShop();
+                saveGame(true);
             }
         }
     }

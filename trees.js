@@ -6,7 +6,10 @@ let trees = {};
 const woodDisplays = document.querySelector(".wood");
 
 let wood = {
-    temporary: 0,
+    whiteOak: 0,
+    sugarMaple: 0,
+    cherryBirch: 0,
+    blackWalnut: 0,
 }
 
 let treeUpgrades = {
@@ -17,6 +20,7 @@ let treeUpgrades = {
     fallSpeed: 3000,
     shakeDelay: 1000,
     autoClick: false,
+    autoBuy: false,
 }
 
 let saveOnExit = true;
@@ -45,7 +49,23 @@ function createTree(type, tree=null) {
     let centered = false;
     const treeElement = document.createElement('img');
 
-    treeElement.src = `images/trees/${type == "starter" ? "temporary" : type}/tree.png`;
+    treeElement.src = `images/trees/${type == "starter" ? "whiteOak" : type}/tree.png`;
+
+    let multiplier = 1;
+    switch (type) {
+        case "whiteOak":
+            multiplier = 1;
+            break;
+        case "sugarMaple":
+            multiplier = 1.25;
+            break;
+        case "cherryBirch":
+            multiplier = 1.5;
+            break;
+        case "blackWalnut":
+            multiplier = 2;
+            break;
+    }
 
     if (type == "starter") {
         centered = true;
@@ -67,7 +87,7 @@ function createTree(type, tree=null) {
     const treeObj = {
         id: id,
         element: treeElement,
-        type: (type == "starter" ? "temporary" : type),
+        type: (type == "starter" ? "whiteOak" : type),
         clickable: (type == "starter" ? true :  false),
         state: (type == "starter" ? "idle" : "growing"), /* idle, shaking, shakingDelay, falling, growing */
         timer: (type == "starter" ? 0 : treeUpgrades.regrowSpeed),
@@ -81,6 +101,12 @@ function createTree(type, tree=null) {
         clickedTime: (tree ? (tree.shakeDelay / 2.5) : (treeUpgrades.shakeDelay / 2.5)),
         autoClick: (tree ? tree.autoClick : treeUpgrades.autoClick),
     }
+
+    treeObj.maxClicks *= multiplier;
+    treeObj.regrows *= multiplier;
+    treeObj.regrowSpeed /= multiplier;
+    treeObj.fallSpeed /= multiplier;
+    treeObj.shakeDelay /= multiplier;
 
     if (treeObj.state === "growing") {
         const randomFactor = Math.random() * 0.2 * treeObj.regrowSpeed;
@@ -172,10 +198,17 @@ function updateTrees(tree, deltaTime) {
     }
 }
 
-function updateWoodDisplay(type="temporary") {
+function updateWoodDisplay(type="whiteOak") {
     const display = woodDisplays.querySelector(`.wood-display.${type}`);
+    
     if (display) {
-        display.style.display = "flex";
         display.querySelector(".wood-display-amount").textContent = wood[type];
+        if (wood[type] <= 0) {
+            display.style.display = "none";
+        } else {
+            display.style.display = "flex";
+        }
     }
+
+    testShowConditions();
 }
