@@ -55,7 +55,7 @@ let shopItems = {
                 whiteOak: 30,
                 sugarMaple: 20,
             },
-            image: "images/trees/whiteOak/tree.png",
+            image: "images/trees/cherryBirch/tree.png",
             timesBought: 0,
             costIncreaseRate: {
                 whiteOak: 20,
@@ -79,7 +79,7 @@ let shopItems = {
                 sugarMaple: 30,
                 cherryBirch: 20,
             },
-            image: "images/trees/whiteOak/tree.png",
+            image: "images/trees/blackWalnut/tree.png",
             timesBought: 0,
             costIncreaseRate: {
                 whiteOak: 30,
