@@ -35,6 +35,9 @@ function softLockPrevention(deltaTime) {
                 softLockPreventionTimer.style.display = "none";
             }
         };
+    } else {
+        softLockPreventionTime = 0;
+        softLockPreventionTimer.style.display = "none";
     }
 }
 
