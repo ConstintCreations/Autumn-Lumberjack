@@ -25,7 +25,7 @@ let treeUpgrades = {
 
 let saveOnExit = true;
 
-let devMode = true;
+let devMode = false;
 let devConsole = false;
 
 document.addEventListener('keydown', (e) => {

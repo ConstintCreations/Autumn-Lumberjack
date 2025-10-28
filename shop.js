@@ -95,7 +95,7 @@ let shopItems = {
     upgrades: {
         maxClicks: {
             name: "Wood Per Tree",
-            description: "Increases the amount of wood gained per tree.",
+            description: "Increases the amount of chops a tree can withstand.",
             baseCost: {
                 whiteOak: 10,
             },
@@ -114,7 +114,7 @@ let shopItems = {
         },
         regrowSpeed: {
             name: "Tree Grow Speed",
-            description: "Decreases the time it takes for trees to grow.",
+            description: "Decreases the time it takes for a tree to grow.",
             baseCost: {
                 whiteOak: 10,
             },
@@ -133,7 +133,7 @@ let shopItems = {
         },
         fallSpeed: {
             name: "Tree Fall Speed",
-            description: "Decreases the time it takes for trees to fall when chopped.",
+            description: "Decreases the time it takes for a tree to fall when chopped.",
             baseCost: {
                 whiteOak: 10,
             },
@@ -211,7 +211,7 @@ let shopItems = {
         },
         woodPerClick: {
             name: "Wood Per Chop",
-            description: "Increases the number of wood per chop of a tree.",
+            description: "Increases the amount of wood gained per chop of a tree.",
             baseCost: {
                 whiteOak: 30,
                 sugarMaple: 20,
