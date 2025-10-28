@@ -6,7 +6,7 @@ Autumn Lumberjack features:
 - Four tree types
 - Upgradeable stats
 - Dynamic shop
-- Auto Buy and Auto Chop systems available in the shop
+- Auto Chop systems available in the shop
 - Save system with auto saving or manual saving (Ctrl + S)
 - Anti-Softlock system
 
